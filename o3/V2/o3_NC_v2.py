@@ -1,0 +1,204 @@
+def o3_create_NC_file_v2(dout, DT):
+   from netCDF4 import Dataset
+   
+   f1 = 'ncas-49i-o3-2' #instrument name
+   f2 = 'wao' #platform name
+   mm = str(int(DT[0,1]))
+   if len(mm)<2:
+      mm = "0" + mm
+   dd = str(int(DT[0,2]))
+   if len(dd)<2:
+      dd = "0" + dd   
+   f3 = str(int(DT[0,0])) + mm + dd #date yyyymmdd
+   f4 = 'o3-concentration' #data product
+   f5 = "v1" #version number
+   f6 = ".nc"
+   fn = dout + f1 + chr(95) + f2 + chr(95) + f3 + chr(95) + f4 + chr(95) + f5 + f6
+
+   fn_nc = Dataset(fn, "w",  format = "NETCDF4_CLASSIC") 
+   
+   return fn_nc
+   
+def o3_NC_Global_Attributes_v2(fn_nc, meta, ET):
+   from datetime import datetime
+   import numpy as np
+   
+   name = meta.loc[:, 'Name':'Name':1].values
+   exp = meta.loc[:, 'Example':'Example':1].values
+   pos = exp[34]
+   pos = pos[0]
+   ix1 = pos.find('N')
+   ix2 = pos.find(',')
+   ix3 = pos.find('E')
+   
+   lat = np.float32(pos[0:ix1])
+   lon = np.float32(pos[ix2+1:ix3])
+   
+   for i in range(0,len(name)):
+      msg1 = np.array(name[i])
+      msg2 = np.array(exp[i])
+      fn_nc.setncattr(msg1[0], msg2[0])
+   
+   fn_nc.last_revised_date = datetime.utcnow().isoformat()  
+   fn_nc.time_coverage_start = datetime.utcfromtimestamp(ET[0]).isoformat()
+   fn_nc.time_coverage_end = datetime.utcfromtimestamp(ET[len(ET)-1]).isoformat()
+   
+   return lat, lon
+   
+def o3_NC_Dimensions_v2(fn_nc, ET):
+   time = fn_nc.createDimension('time', len(ET) )
+   latitude = fn_nc.createDimension('latitude', 1)
+   longitude = fn_nc.createDimension('longitude', 1) 
+   
+def o3_NC_VaraiblesAndData_v2(fn_nc, data, np, lat, lon):
+   #time
+   times = fn_nc.createVariable('time', np.float64, ('time',))
+   #variable attributes
+   times.type = 'float64'
+   times.units = 'seconds since 1970-01-01 00:00:00'
+   times.standard_name = 'time'
+   times.long_name = 'Time (seconds since 1970-01-01 00:00:00)'
+   times.axis = 'T'
+   times.valid_min = np.float64(min(data.ET))
+   times.valid_max = np.float64(max(data.ET))
+   times.calendar = 'standard'
+   #write data
+   times[:] = np.float64(data.ET)
+   
+   #lat
+   latitudes = fn_nc.createVariable('latitude', np.float32, ('latitude',))
+   #variable attributes
+   latitudes.type = 'float32'
+   latitudes.units = 'degrees_north'
+   latitudes.standard_name = 'latitude'
+   latitudes.long_name = 'Latitude'
+   #write data
+   latitudes[:] = np.float32(lat)
+   
+   #lon
+   longitudes = fn_nc.createVariable('longitude', np.float32, ('longitude',))
+   #variable attributes
+   longitudes.type = 'float32'
+   longitudes.units = 'degrees_east'
+   longitudes.standard_name = 'longitude'
+   longitudes.long_name = 'Longitude'
+   #write data
+   longitudes[:] = np.float32(lon)
+   
+   #doy
+   doys = fn_nc.createVariable('day_of_year', np.float32, ('time',))
+   #variable attributes
+   doys.type = 'float32'
+   doys.units = '1'
+   doys.long_name = 'Day of Year'
+   doys.valid_min = np.float32(min(data.DoY))
+   doys.valid_max = np.float32(max(data.DoY))
+   #write data
+   doys[:] = np.float32(data.DoY)
+   
+   #year
+   years = fn_nc.createVariable('year', np.int32, ('time',))
+   #variable attributes
+   years.type = 'int32'
+   years.units = '1'
+   years.long_name = 'Year'
+   years.valid_min = np.int32(min(data.DT[:,0]))
+   years.valid_max = np.int32(max(data.DT[:,0])) 
+   #write data
+   years[:] = np.int32(data.DT[:,0])
+   
+   #month
+   months = fn_nc.createVariable('month', np.int32, ('time',))
+   #variable attributes
+   months.type = 'int32'
+   months.units = '1'
+   months.long_name = 'Month'
+   months.valid_min = np.int32(min(data.DT[:,1]))
+   months.valid_max = np.int32(max(data.DT[:,1])) 
+   #write data
+   months[:] = np.int32(data.DT[:,1])
+   
+   #day
+   days = fn_nc.createVariable('day', np.int32, ('time',))
+   #variable attributes
+   days.type = 'int32'
+   days.units = '1'
+   days.long_name = 'Day'
+   days.valid_min = np.int32(min(data.DT[:,2]))
+   days.valid_max = np.int32(max(data.DT[:,2]))
+   #write data
+   days[:] = np.int32(data.DT[:,2])
+   
+   #hour
+   hours = fn_nc.createVariable('hour', np.int32, ('time',))
+   #variable attributes
+   hours.type = 'int32'
+   hours.units = '1'
+   hours.long_name = 'Hour'
+   hours.valid_min = np.int32(min(data.DT[:,3]))
+   hours.valid_max = np.int32(max(data.DT[:,3])) 
+   #write data
+   hours[:] = np.int32(data.DT[:,3])
+   
+   #minute
+   minutes = fn_nc.createVariable('minute', np.int32, ('time',))
+   #variable attributes
+   minutes.type = 'int32'
+   minutes.units = '1'
+   minutes.long_name = 'Minute'
+   minutes.valid_min = np.int32(min(data.DT[:,4]))
+   minutes.valid_max = np.int32(max(data.DT[:,4]))  
+   #write data
+   minutes[:] = np.int32(data.DT[:,4])
+   
+   #second
+   seconds = fn_nc.createVariable('second', np.float32, ('time',))
+   #variable attributes
+   seconds.type = 'float32'
+   seconds.units = '1'
+   seconds.long_name = 'Second'
+   seconds.valid_min = np.float32(min(data.DT[:,5]))
+   seconds.valid_max = np.float32(max(data.DT[:,5])) 
+   #write data
+   seconds[:] = np.float32(data.DT[:,5])
+   
+   #O3 conc
+   O3 = fn_nc.createVariable('mole_fraction_of_ozone_in_air', np.float32, ('time',),fill_value=-1.00e+20)
+   #variable attributes
+   O3.type = 'float32'
+   O3.units = '1e-9'
+   O3.practical_units = 'ppb'
+   O3.standard_name = 'mole_fraction_of_ozone_in_air'
+   O3.long_name = 'Mole Fraction of Ozone in air'
+   XX = data.o3
+   np.putmask(XX, data.flag != 1, np.nan)
+   O3.valid_min = np.float32(np.nanmin(XX))
+   O3.valid_max = np.float32(np.nanmax(XX))
+   O3.cell_methods = 'time: point'
+   O3.coordinates = 'latitude longitude'
+   O3.chemical_species = 'O3'
+   #write data
+   O3[:] = np.float32(data.o3)
+   
+   #Qc flag
+   qc_flags = fn_nc.createVariable('qc_flag', np.int8, ('time',))
+   #variable attribute
+   qc_flags.type = 'byte'
+   qc_flags.units = '1'
+   qc_flags.long_name = 'Data Quality Flag'
+   qc_flags.flag_values = '0b,1b,2b,3b'
+   qc_flags.flag_meanings = 'not_used' + '\n'
+   qc_flags.flag_meanings = qc_flags.flag_meanings + 'good_data' + '\n'
+   qc_flags.flag_meanings = qc_flags.flag_meanings + 'suspect_data_unspecified_instrument_performance_issues_contact_data_originator_for_more_information' + '\n'
+   qc_flags.flag_meanings = qc_flags.flag_meanings + 'suspect_data_time_stamp_error' 
+   #write data
+   qc_flags[:] = np.int8(data.flag)
+   
+def NC_o3_v2(pd, np, dout, meta, data):
+   fn_nc = o3_create_NC_file_v2(dout, data.DT)
+   
+   lat, lon = o3_NC_Global_Attributes_v2(fn_nc, meta, data.ET)
+   o3_NC_Dimensions_v2(fn_nc, data.ET)
+   o3_NC_VaraiblesAndData_v2(fn_nc, data, np, lat, lon)
+
+   fn_nc.close()
