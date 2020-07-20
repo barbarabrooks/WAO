@@ -1,0 +1,41 @@
+# Configuration file for conveting WAO data to nc
+# Required by WAO_v4.py
+# Develped by Barbara Brooks <barbara.brooks@ncas.ac.uk>
+# 06/2020
+# Each input on a separate line
+
+# version
+# instrument name
+# data product
+# path to data file
+
+##### Start - do not remove #####
+2.0
+uea-sodar-rass-1
+acoustic-backscatter-winds
+C:\Users\lecbjb\Desktop\WORK\CODE\Python\WAO\sodar\0822.SDR
+##### End - do not remove #####
+
+##### Possible combos ##### 
+<ncas-ceilometer-2,aerosol-backscatter>
+<ncas-ceilometer-2,cloud-base>
+<ncas-ceilometer-2,cloud-coverage,not currently configured for this> 
+<ncas-co2-1,co2-concentration>
+<ncas-ftir-1,ch4-n2o-co2-co-concentration>
+<ncas-ghg-gc-fid-1,ch4-concentration>
+<ncas-ghg-gc-ecd-1,n2o-sf6-concentration>
+<ncas-ghg-gc-ecd-1,sf6-concentration>
+<ncas-o2-1,o2n2-concentration-ratio>
+<ncas-rga3-1,co-h2-concentration>
+<ncas-rga3-1,h2-concentration>
+<uea-42i-nox-1,nox-noxy-concentration>
+<uea-43i-so2-1,so2-concentration>
+<uea-49i-o3-1,o3-concentration>
+<uea-aws-1,surface-met>
+<uea-aws-2,surface-met>
+<uea-caps-1,no2-concentration>
+<uea-fidas200E-1,pm-concentration>
+<uea-radon-1,radon-concentration>
+<uea-sodar-rass-1,acoustic-backscatter-winds>
+<uea-sodar-rass-1,boundary-layer-temperature, not currently available>
+
