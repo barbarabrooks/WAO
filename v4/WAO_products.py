@@ -2261,11 +2261,11 @@ def so2_concentration(meta, data, nc, ver):
    #variable attribute
    v.units = '1'
    v.long_name = 'Data Quality Flag'
-   qc_flags.flag_values = '0b,1b,2b,3b'
-   qc_flags.flag_meanings = 'not_used' + '\n'
-   qc_flags.flag_meanings = qc_flags.flag_meanings + 'good_data' + '\n'
-   qc_flags.flag_meanings = qc_flags.flag_meanings + 'suspect_data_unspecified_instrument_performance_issues_contact_data_originator_for_more_information' + '\n'
-   qc_flags.flag_meanings = qc_flags.flag_meanings + 'suspect_data_time_stamp_error'  
+   v.flag_values = '0b,1b,2b,3b'
+   v.flag_meanings = 'not_used' + '\n'
+   v.flag_meanings = v.flag_meanings + 'good_data' + '\n'
+   v.flag_meanings = v.flag_meanings + 'suspect_data_unspecified_instrument_performance_issues_contact_data_originator_for_more_information' + '\n'
+   v.flag_meanings = v.flag_meanings + 'suspect_data_time_stamp_error'  
    #write data
    v[:] = np.int8(data.flag)
 
