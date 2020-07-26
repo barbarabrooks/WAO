@@ -2040,7 +2040,7 @@ def radon_concentration(meta, data, nc, ver):
       v.valid_max = np.float32(data.max_dat)
       v.cell_methods = 'time: point'
       v.coordinates = 'latitude longitude'
-      v.chemical_species = 'Ra'
+      v.chemical_species = 'Rn'
       #write data
       v[:] = np.float32(mole_frac)
    
@@ -2055,7 +2055,7 @@ def radon_concentration(meta, data, nc, ver):
       v.valid_max = np.float32(data.max_dat)
       v.cell_methods = 'time: point'
       v.coordinates = 'latitude longitude'
-      v.chemical_species = 'Ra'
+      v.chemical_species = 'Rn'
       #write data
       v[:] = np.float32(data.mass_frac)
    
@@ -2069,7 +2069,7 @@ def radon_concentration(meta, data, nc, ver):
       v.valid_max = np.float32(data.max_dat)
       v.cell_methods = 'time: point'
       v.coordinates = 'latitude longitude'
-      v.chemical_species = 'Ra'
+      v.chemical_species = 'Rn'
       #write data
       v[:] = np.float32(data.mole_conc)
    
@@ -2083,7 +2083,7 @@ def radon_concentration(meta, data, nc, ver):
       v.valid_max = np.float32(data.max_dat)
       v.cell_methods = 'time: point'
       v.coordinates = 'latitude longitude'
-      v.chemical_species = 'Ra'
+      v.chemical_species = 'Rn'
       #write data
       v[:] = np.float32(data.mass_conc)
    
