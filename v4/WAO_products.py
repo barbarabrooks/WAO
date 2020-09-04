@@ -73,10 +73,8 @@ def acoustic_backscatter_winds(meta, data, nc, ver):
    v.units = 'dB'
    v.standard_name = 'sound_intensity_level_in_air'
    v.long_name = 'Sound Intensity Level in Air'
-   xx = data.R
-   np.putmask(xx, data.qc_backscatter != 1, np.nan)
-   v.valid_min = np.float32(np.nanmin(xx))
-   v.valid_max = np.float32(np.nanmax(xx))
+   v.valid_min = np.float32(data.vmin_R)
+   v.valid_max = np.float32(data.vmax_R)
    v.cell_methods = 'time: mean'
    v.coordinates = 'latitude longitude'
    #write data
@@ -87,10 +85,8 @@ def acoustic_backscatter_winds(meta, data, nc, ver):
    v.units = 'm s-1'
    v.standard_name = 'wind_speed'
    v.long_name = 'Wind Speed'
-   xx = data.V
-   np.putmask(xx, data.qc_mean_winds != 1, np.nan)
-   v.valid_min = np.float32(np.nanmin(xx))
-   v.valid_max = np.float32(np.nanmax(xx))
+   v.valid_min = np.float32(data.vmin_V)
+   v.valid_max = np.float32(data.vmax_V)
    v.cell_methods = 'time: mean'
    v.coordinates = 'latitude longitude'
    #write data
@@ -101,10 +97,8 @@ def acoustic_backscatter_winds(meta, data, nc, ver):
    v.units = 'degree'
    v.standard_name = 'wind_from_direction'
    v.long_name = 'Wind From Direction'
-   xx = data.D
-   np.putmask(xx, data.qc_mean_winds != 1, np.nan)
-   v.valid_min = np.float32(np.nanmin(xx))
-   v.valid_max = np.float32(np.nanmax(xx))
+   v.valid_min = np.float32(data.vmin_D)
+   v.valid_max = np.float32(data.vmax_D)
    v.cell_methods = 'time: mean'
    v.coordinates = 'latitude longitude'
    #write data
@@ -115,10 +109,8 @@ def acoustic_backscatter_winds(meta, data, nc, ver):
    v.units = 'm s-1'
    v.standard_name = 'eastward_wind'
    v.long_name = 'Eastward Wind Component (U)'
-   xx = data.VVU
-   np.putmask(xx, data.qc_wind_component_eastward != 1, np.nan)
-   v.valid_min = np.float32(np.nanmin(xx))
-   v.valid_max = np.float32(np.nanmax(xx))
+   v.valid_min = np.float32(data.vmin_VVU)
+   v.valid_max = np.float32(data.vmax_VVU)
    v.cell_methods = 'time: mean'
    v.coordinates = 'latitude longitude'
    #write data
@@ -129,10 +121,8 @@ def acoustic_backscatter_winds(meta, data, nc, ver):
    v.units = 'm s-1'
    v.standard_name = 'northward_wind'
    v.long_name = 'Northward Wind Component (V)'
-   xx = data.VVV
-   np.putmask(xx, data.qc_wind_component_northward != 1, np.nan)
-   v.valid_min = np.float32(np.nanmin(xx))
-   v.valid_max = np.float32(np.nanmax(xx))
+   v.valid_min = np.float32(data.vmin_VVV)
+   v.valid_max = np.float32(data.vmax_VVV)
    v.cell_methods = 'time: mean'
    v.coordinates = 'latitude longitude'
    #write data
@@ -143,10 +133,8 @@ def acoustic_backscatter_winds(meta, data, nc, ver):
    v.units = 'm s-1'
    v.standard_name = 'upward_air_velocity'
    v.long_name = 'Upward Air Velocity (W)'
-   xx = data.VVW
-   np.putmask(xx, data.qc_wind_component_upward_air_velocity != 1, np.nan)
-   v.valid_min = np.float32(np.nanmin(xx))
-   v.valid_max = np.float32(np.nanmax(xx))
+   v.valid_min = np.float32(data.vmin_VVW)
+   v.valid_max = np.float32(data.vmax_VVW)
    v.cell_methods = 'time: mean'
    v.coordinates = 'latitude longitude'
    #write data
@@ -275,10 +263,8 @@ def aerosol_backscatter(meta, data, nc, ver):
    #variable attributes
    v.units = 'm-1 sr-1'
    v.long_name = 'Attenuated Aerosol Backscatter Coefficient'
-   xx = data.BB
-   np.putmask(xx, data.BB_flag != 1, np.nan)
-   v.valid_min = np.float32(np.nanmin(xx))
-   v.valid_max = np.float32(np.nanmax(xx))
+   v.valid_min = np.float32(data.vmin)
+   v.valid_max = np.float32(data.vmax)
    v.cell_methods = 'time: mean'
    v.coordinates = 'latitude longitude'
    #write data

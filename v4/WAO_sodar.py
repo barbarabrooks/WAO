@@ -563,6 +563,41 @@ def qc_DATA(data_final):
    data_final.qc_wind_component_upward_air_velocity[ii] = 6
    
    return data_final
+   
+def valid_DATA(data_final, temp):
+   import numpy as np
+   xx = np.array(np.float32(temp.R))
+   np.putmask(xx, data_final.qc_backscatter != 1, np.nan)
+   data_final.vmin_R = np.float32(np.nanmin(xx))
+   data_final.vmax_R = np.float32(np.nanmax(xx))
+   
+   xx = np.array(np.float32(temp.V))
+   np.putmask(xx, data_final.qc_mean_winds != 1, np.nan)
+   data_final.vmin_V = np.float32(np.nanmin(xx))
+   data_final.vmax_V = np.float32(np.nanmax(xx))
+   
+   xx = np.array(np.float32(temp.D))
+   np.putmask(xx, data_final.qc_mean_winds != 1, np.nan)
+   data_final.vmin_D = np.float32(np.nanmin(xx))
+   data_final.vmax_D = np.float32(np.nanmax(xx))
+   
+   xx = np.array(np.float32(temp.VVU))
+   np.putmask(xx, data_final.qc_wind_component_eastward != 1, np.nan)
+   data_final.vmin_VVU = np.float32(np.nanmin(xx))
+   data_final.vmax_VVU = np.float32(np.nanmax(xx))
+   
+   xx = np.array(np.float32(temp.VVV))
+   np.putmask(xx, data_final.qc_wind_component_northward != 1, np.nan)
+   data_final.vmin_VVV = np.float32(np.nanmin(xx))
+   data_final.vmax_VVV = np.float32(np.nanmax(xx))
+   
+   xx = np.array(np.float32(temp.VVW))
+   np.putmask(xx, data_final.qc_wind_component_upward_air_velocity != 1, np.nan)
+   data_final.vmin_VVW = np.float32(np.nanmin(xx))
+   data_final.vmax_VVW = np.float32(np.nanmax(xx))
+   
+   return data_final
+   
     
 def sodar_parse(fn, data): 
    lines = []
@@ -594,5 +629,8 @@ def sodar_parse(fn, data):
    
    #QC data
    data_final = qc_DATA(data_final)
+   
+   #set valid min and max
+   data_final = valid_DATA(data_final, data_final)
    
    return data_final

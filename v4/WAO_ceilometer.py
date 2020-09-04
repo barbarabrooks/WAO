@@ -221,7 +221,7 @@ def parse_PROF_v2(lines, start_of_block, np, data, offset):
       line4.append(bb)
           
    data.ZZ = np.array(np.float32(z) + 10)
-   data.BB = np.array(np.float32(line4))      
+   data.BB = np.array(np.float32(line4))   
 
    #backscatter flag
    data.BB_flag = np.ones(data.BB.shape)
@@ -229,6 +229,12 @@ def parse_PROF_v2(lines, start_of_block, np, data, offset):
    data.BB_flag[ii_min] = 2
    ii_max = np.where(data.BB > 0.06)
    data.BB_flag[ii_max] = 2
+   
+   # valid_min and valid_max
+   xx =   np.array(np.float32(line4))
+   np.putmask(xx, data.BB_flag != 1, np.nan)
+   data.vmin = np.float32(np.nanmin(xx))  
+   data.vmax = np.float32(np.nanmax(xx))
        
    return data
     
